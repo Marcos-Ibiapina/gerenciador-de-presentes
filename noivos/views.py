@@ -28,7 +28,8 @@ def home(request):
     
 def lista_convidados(request):
     if request.method == "GET":
-        return render(request, 'lista_convidados.html')
+        convidados = Convidados.objects.all()
+        return render(request, 'lista_convidados.html', {'convidados': convidados})
     elif request.method == "POST":
         nome_convidado = request.POST.get('nome_convidado')
         whatsapp = request.POST.get('whatsapp')

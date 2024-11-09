@@ -4,5 +4,4 @@ from .models import Presentes, Convidados
 
 
 admin.site.register(Presentes)
-
 admin.site.register(Convidados)

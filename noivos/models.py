@@ -1,17 +1,8 @@
 from django.db import models
 import secrets
 
-# Create your models here.
-class Presentes(models.Model):
-    nome_presente = models.CharField(max_length=100)
-    foto = models.ImageField(upload_to='presentes')
-    preco = models.DecimalField(max_digits=6, decimal_places=2)
-    importancia = models.IntegerField()
-    reservado = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return self.nome_presente
-    
+# Create your models here. 
+   
 class Convidados(models.Model):
     status_choices = (
         ('AC', 'Aguardando confirmação'),
@@ -29,5 +20,21 @@ class Convidados(models.Model):
         if not self.token:
             self.token = secrets.token_urlsafe(16)
         super(Convidados, self).save(*args, **kwargs)
+    
+    @property
+    def link_convite(self):
+        return f'http://127.0.0.1:8000/convidados/?token={self.token}'
+    
+    def __str__(self):
+        return self.nome_convidado
 
-
+class Presentes(models.Model):
+    nome_presente = models.CharField(max_length=100)
+    foto = models.ImageField(upload_to='presentes')
+    preco = models.DecimalField(max_digits=6, decimal_places=2)
+    importancia = models.IntegerField()
+    reservado = models.BooleanField(default=False)
+    reservado_por = models.ForeignKey(Convidados, null=True, blank=True, on_delete=models.DO_NOTHING)
+    
+    def __str__(self):
+        return self.nome_presente
